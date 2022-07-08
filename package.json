@@ -7,6 +7,7 @@
 	"scripts": {
 		"start": "node -r dotenv/config index.js",
 		"devStart": "nodemon -r dotenv/config index.js",
+		"swagger-autogen": "node swagger.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
