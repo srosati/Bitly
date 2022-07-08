@@ -1,5 +1,6 @@
 import { createTag, listTags, updateTag, getTagById, getTagByName, deleteTag } from './model.js';
 import { getUser } from '../users/model.js';
+import { validationResult } from 'express-validator';
 
 export async function listTagsService(_, res) {
 	try {
@@ -11,15 +12,13 @@ export async function listTagsService(_, res) {
 }
 
 export async function createTagService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	const { name } = req.body;
 	const { id } = req.user;
-	if (!name || !id) {
-		return res.status(400).json({
-			error: 'name is required'
-		});
-	}
-
 	const user = await getUser(id);
+	
 	if (user == null) {
 		return res.status(404).json({
 			error: 'user not found'
@@ -42,14 +41,11 @@ export async function createTagService(req, res) {
 }
 
 export async function getTagService(req, res) {
-	const { id } = req.params.id;
-	if (!id) {
-		return res.status(400).json({
-			error: 'Id is required'
-		});
-	}
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	try {
-		const tag = await getTagById(id);
+		const tag = await getTagById(req.params.id);
 		return res.json(tag);
 	} catch (err) {
 		return res.status(500).json({
@@ -59,21 +55,18 @@ export async function getTagService(req, res) {
 }
 
 export async function updateTagService(req, res) {
-	const { id } = req.params.id;
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	const { name } = req.body;
-	if (!id) {
-		return res.status(400).json({
-			error: 'Id is required'
-		});
-	}
-	const tag = await getTagById(id);
+	const tag = await getTagById(req.params.id);
 	if (tag == null) {
 		return res.status(204).json({
 			error: 'Tag not found'
 		});
 	}
 	try {
-		const tag = await updateTag(id, name);
+		const tag = await updateTag(req.params.id, name);
 		return res.json(tag);
 	} catch (err) {
 		return res.status(500).json({
@@ -83,20 +76,17 @@ export async function updateTagService(req, res) {
 }
 
 export async function deleteTagService(req, res) {
-	const { id } = req.params.id;
-	if (!id) {
-		return res.status(400).json({
-			error: 'Id is required'
-		});
-	}
-	const tag = await getTagById(id);
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+	const tag = await getTagById(req.params.id);
 	if (tag == null) {
 		return res.status(204).json({
 			error: 'Tag not found'
 		});
 	}
 	try {
-		const tag = await deleteTag(id);
+		const tag = await deleteTag(req.params.id);
 		return res.json(tag);
 	} catch (err) {
 		return res.status(500).json({
