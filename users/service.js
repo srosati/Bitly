@@ -16,7 +16,6 @@ export async function createUserService(req, res) {
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	const { email, password } = req.body;
-	// if (!email || !password) return res.status(400).send('Email and password are required');
 
 	try {
 		const hashedPassword = await hash(password, 10);
@@ -24,13 +23,13 @@ export async function createUserService(req, res) {
 		const user = await createUser(email, hashedPassword);
 		return res.status(201).json(user);
 	} catch (err) {
-		console.error(err);
 		return res.status(500).send(err);
 	}
 }
 
 export async function getUserService(req, res) {
-	if (!req.params.id) return res.status(400).send('Id is required');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	try {
 		const user = await getUser(req.params.id);
@@ -42,8 +41,8 @@ export async function getUserService(req, res) {
 }
 
 export async function updateUserService(req, res) {
-	if (!req.params.id) return res.status(400).send('Id is required');
-	if (!req.body.password) return res.status(400).send('Password is required');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	const { password } = req.body;
 
@@ -60,7 +59,8 @@ export async function updateUserService(req, res) {
 }
 
 export async function deleteUserService(req, res) {
-	if (!req.params.id) return res.status(400).send('Id is required');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	try {
 		const deleteResult = await deleteUser(req.params.id);
