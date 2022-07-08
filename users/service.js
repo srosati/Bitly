@@ -1,4 +1,5 @@
 import { hash } from 'bcrypt';
+import { validationResult } from 'express-validator';
 import { createUser, getUsers, getUser, updateUser, deleteUser } from './model.js';
 
 export async function listUsersService(_, res) {
@@ -11,8 +12,11 @@ export async function listUsersService(_, res) {
 }
 
 export async function createUserService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	const { email, password } = req.body;
-	if (!email || !password) return res.status(400).send('Email and password are required');
+	// if (!email || !password) return res.status(400).send('Email and password are required');
 
 	try {
 		const hashedPassword = await hash(password, 10);

@@ -9,13 +9,15 @@ import {
 	updateUserService
 } from './service.js';
 
+import { createUserValidator } from './validation.js';
+
 const usersRouter = Router();
 
 usersRouter.get('/', isLoggedIn, listUsersService);
 
 usersRouter.get('/:id', isSameUser, getUserService);
 
-usersRouter.post('/', createUserService);
+usersRouter.post('/', createUserValidator, createUserService);
 
 usersRouter.put('/:id', isSameUser, updateUserService);
 
