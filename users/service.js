@@ -21,9 +21,9 @@ export async function createUserService(req, res) {
 		const hashedPassword = await hash(password, 10);
 
 		const user = await createUser(email, hashedPassword);
-		return res.status(201).json(user);
+		res.status(201).json(user);
 	} catch (err) {
-		return res.status(500).send(err);
+		res.status(500).send(err);
 	}
 }
 
@@ -34,9 +34,9 @@ export async function getUserService(req, res) {
 	try {
 		const user = await getUser(req.params.id);
 		if (user == null) return res.status(404).send('User not found');
-		return res.json(user);
+		res.json(user);
 	} catch (err) {
-		return res.status(500).send(err);
+		res.status(500).send(err);
 	}
 }
 
@@ -52,9 +52,9 @@ export async function updateUserService(req, res) {
 
 		const hashedPassword = await hash(password, 10);
 		const updatedUser = await updateUser(user.id, hashedPassword);
-		return res.json(updatedUser);
+		res.json(updatedUser);
 	} catch (err) {
-		return res.status(500).send(err);
+		res.status(500).send(err);
 	}
 }
 
@@ -66,9 +66,8 @@ export async function deleteUserService(req, res) {
 		const deleteResult = await deleteUser(req.params.id);
 		if (deleteResult == null) return res.status(404).send('User not found');
 
-		return res.status(204).send();
+		res.status(204).send();
 	} catch (err) {
-		console.error(err);
-		return res.status(500).send(err);
+		res.status(500).send(err);
 	}
 }

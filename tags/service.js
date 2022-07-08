@@ -2,6 +2,7 @@ import { createTag, listTags, updateTag, getTagById, getTagByName, deleteTag } f
 import { getUser } from '../users/model.js';
 import { validationResult } from 'express-validator';
 
+//TODO: add user id to list
 export async function listTagsService(_, res) {
 	try {
 		const tags = await listTags({});
@@ -18,7 +19,7 @@ export async function createTagService(req, res) {
 	const { name } = req.body;
 	const { id } = req.user;
 	const user = await getUser(id);
-	
+
 	if (user == null) {
 		return res.status(404).json({
 			error: 'user not found'
@@ -46,6 +47,7 @@ export async function getTagService(req, res) {
 
 	try {
 		const tag = await getTagById(req.params.id);
+		if (tag == null) return res.status(404).json({ error: 'tag not found' });
 		return res.json(tag);
 	} catch (err) {
 		return res.status(500).json({
@@ -79,14 +81,14 @@ export async function deleteTagService(req, res) {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-	const tag = await getTagById(req.params.id);
+	let tag = await getTagById(req.params.id);
 	if (tag == null) {
 		return res.status(204).json({
 			error: 'Tag not found'
 		});
 	}
 	try {
-		const tag = await deleteTag(req.params.id);
+		tag = await deleteTag(req.params.id);
 		return res.json(tag);
 	} catch (err) {
 		return res.status(500).json({
