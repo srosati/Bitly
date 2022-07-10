@@ -21,13 +21,12 @@ export async function listUrlsService(req, res) {
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	try {
-		let tag = req.query.tag;
-		console.log(tag);
-		if (!tag) {
-			const aliases = await listUrls();
+		let tag_id = req.query.tag_id;
+		if (!tag_id) {
+			const aliases = await listUrls(req.user.id);
 			return res.json(aliases);
 		}
-		const aliases = await listUrlsWithTag(tag);
+		const aliases = await listUrlsWithTag(tag_id);
 		return res.json(aliases);
 	} catch (err) {
 		res.status(500).json(err);
@@ -70,9 +69,9 @@ export async function appendTagService(req, res) {
 	if (url == null) {
 		return res.status(404).json({ error: 'url not found' });
 	}
-	let tag = await getTagById(req.body.tag);
+	let tag = await getTagById(req.body.tag_id);
 	if (tag == null) {
-		return res.status(404).json({ error: 'tag not found' });
+		return res.status(404).json({ error: 'Tag not found' });
 	}
 	try {
 		await appendTag(url.id, tag.id);
@@ -88,11 +87,11 @@ export async function removeTagService(req, res) {
 
 	let url = await getUrl(req.params.id);
 	if (url == null) {
-		return res.status(404).json({ error: 'url not found' });
+		return res.status(404).json({ error: 'Url not found' });
 	}
-	let tag = await getTagById(req.body.tag);
+	let tag = await getTagById(req.body.tag_id);
 	if (tag == null) {
-		return res.status(404).json({ error: 'tag not found' });
+		return res.status(404).json({ error: 'Tag not found' });
 	}
 	try {
 		await removeTag(url.id, tag.id);
