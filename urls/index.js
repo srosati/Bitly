@@ -6,21 +6,27 @@ import {
 	deleteUrlService,
 	getUrlService,
 	listUrlsService,
-	updateUrlService
+	updateUrlService,
+	appendTagService,
+	removeTagService
 } from './service.js';
 
-import { createUrlValidator, updateUrlValidator, urlIdValidator } from './validation.js';
+import { createUrlValidator, updateUrlValidator, urlIdValidator, tagValidator, queryValidator } from './validation.js';
 
 const urlRouter = Router();
 
-urlRouter.get('/', isLoggedIn, listUrlsService);
+urlRouter.get('/', isLoggedIn, queryValidator, listUrlsService);
 
 urlRouter.get('/:id', isLoggedIn, urlIdValidator, getUrlService);
 
 urlRouter.post('/', isLoggedIn, createUrlValidator, createUrlService);
 
+urlRouter.post('/:id/tag', isUrlOwner, tagValidator, appendTagService);
+
 urlRouter.put('/:id', isUrlOwner, updateUrlValidator, updateUrlService);
 
 urlRouter.delete('/:id', isUrlOwner, urlIdValidator, deleteUrlService);
+
+urlRouter.delete('/:id/tag', isUrlOwner, tagValidator, removeTagService);
 
 export default urlRouter;

@@ -7,6 +7,15 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 
 router.post('/login', async (req, res, next) => {
+	/* 
+		#swagger.parameters['body'] = {
+			in: 'body',
+			schema : {
+				email: 'test@test.com',
+				password: 'your_password'
+			}
+		} 
+	*/
 	passport.authenticate('login', (err, user, _) => {
 		if (err || !user) return res.status(401).send('Unauthorized');
 

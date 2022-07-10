@@ -1,4 +1,5 @@
 import pg from 'pg';
+import { createClient } from 'redis';
 
 export const db = new pg.Pool({
 	user: process.env.DB_USER,
@@ -7,3 +8,13 @@ export const db = new pg.Pool({
 	port: process.env.DB_PORT,
 	database: process.env.DB_NAME
 });
+
+const client = createClient({
+	url: process.env.REDIS_URL
+});
+
+client.on('error', (err) => console.log('Redis Client Error', err));
+
+await client.connect();
+
+export const redisClient = client;

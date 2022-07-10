@@ -7,7 +7,8 @@ import usersRouter from './users/index.js';
 import tagsRouter from './tags/index.js';
 import urlsRouter from './urls/index.js';
 
-import { redirectUrlService }from './urls/service.js';
+import { redirectUrlService } from './urls/service.js';
+import { redirectValidator } from './urls/validation.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -21,6 +22,6 @@ app.use('/auth', authRouter);
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.get('/:alias', redirectUrlService);
+app.get('/:alias', redirectValidator, redirectUrlService);
 
 app.listen(PORT, () => console.log('App listening on port', PORT));

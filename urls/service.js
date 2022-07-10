@@ -1,11 +1,34 @@
-import { getUrl, listUrls, createUrl, updateUrl, deleteUrl, getUrlByAlias, incrementUrlClicks } from './model.js';
+import {
+	getUrl,
+	listUrls,
+	listUrlsWithTag,
+	createUrl,
+	updateUrl,
+	deleteUrl,
+	getUrlByAlias,
+	incrementUrlClicks,
+	getRedisAlias,
+	setRedisAlias,
+	appendTag,
+	removeTag
+} from './model.js';
 import { validationResult } from 'express-validator';
 import { getUser } from '../users/model.js';
+import { getTagById } from '../tags/model.js';
 
-export async function listUrlsService(_, res) {
+export async function listUrlsService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	try {
-		const aliases = await listUrls();
-		res.json(aliases);
+		let tag = req.query.tag;
+		console.log(tag);
+		if (!tag) {
+			const aliases = await listUrls();
+			return res.json(aliases);
+		}
+		const aliases = await listUrlsWithTag(tag);
+		return res.json(aliases);
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -36,6 +59,46 @@ export async function createUrlService(req, res) {
 		res.json(url);
 	} catch (err) {
 		res.status(500).json(err);
+	}
+}
+
+export async function appendTagService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+	let url = await getUrl(req.params.id);
+	if (url == null) {
+		return res.status(404).json({ error: 'url not found' });
+	}
+	let tag = await getTagById(req.body.tag);
+	if (tag == null) {
+		return res.status(404).json({ error: 'tag not found' });
+	}
+	try {
+		await appendTag(url.id, tag.id);
+		res.json(url);
+	} catch (err) {
+		res.status(500).json({ error: err });
+	}
+}
+
+export async function removeTagService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+	let url = await getUrl(req.params.id);
+	if (url == null) {
+		return res.status(404).json({ error: 'url not found' });
+	}
+	let tag = await getTagById(req.body.tag);
+	if (tag == null) {
+		return res.status(404).json({ error: 'tag not found' });
+	}
+	try {
+		await removeTag(url.id, tag.id);
+		res.json(url);
+	} catch (err) {
+		res.status(500).json({ error: err });
 	}
 }
 
@@ -100,15 +163,23 @@ export async function deleteUrlService(req, res) {
 export async function redirectUrlService(req, res) {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
 	try {
-		let url = await getUrlByAlias(req.params.alias);
-		if (url == null)
-			return res.status(404).json({
-				error: 'Url not found'
-			});
-		
-        await incrementUrlClicks(url.id);
-		res.redirect(url.redirect_to);
+		let redirect_to = await getRedisAlias(req.params.alias);
+		if (redirect_to == null) {
+			let url = await getUrlByAlias(req.params.alias);
+			if (url == null)
+				return res.status(404).json({
+					error: 'Url not found'
+				});
+
+			await setRedisAlias(req.params.alias, url.redirect_to);
+			redirect_to = url.redirect_to;
+		}
+
+		res.redirect(redirect_to);
+
+		await incrementUrlClicks(redirect_to);
 	} catch (err) {
 		res.status(500).json(err);
 	}
