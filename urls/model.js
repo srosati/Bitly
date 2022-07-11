@@ -1,14 +1,20 @@
 import { db, redisClient } from '../db.js';
 
-export async function listUrls(user_id) {
-	const result = await db.query(`SELECT * FROM urls WHERE user_id = $1`, [user_id]);
+const order_by = {
+	clicks: 'clicks DESC',
+	created_at: 'created_at'
+};
+
+export async function listUrls(user_id, order = "created_at") {
+	const result = await db.query(`SELECT * FROM urls WHERE user_id = $1 ORDER BY ${order_by[order]}`, [user_id]);
 	return result.rows;
 }
 
-export async function listUrlsWithTag(tag_id) {
-	const result = await db.query(`SELECT * FROM urls JOIN url_tags ut ON urls.id = ut.url_id WHERE tag_id = $1 `, [
-		tag_id
-	]);
+export async function listUrlsWithTag(user_id, tag_id, order = "created_at") {
+	const result = await db.query(
+		`SELECT * FROM urls JOIN url_tags ut ON urls.id = ut.url_id WHERE user_id = $1 AND tag_id = $2 ORDER BY ${order_by[order]}`,
+		[user_id, tag_id]
+	);
 	return result.rows;
 }
 

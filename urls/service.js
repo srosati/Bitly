@@ -22,11 +22,13 @@ export async function listUrlsService(req, res) {
 
 	try {
 		let tag_id = req.query.tag_id;
+		let order_by = req.query.order_by;
+		console.log(tag_id, order_by);
 		if (!tag_id) {
-			const aliases = await listUrls(req.user.id);
+			const aliases = await listUrls(req.user.id, order_by);
 			return res.json(aliases);
 		}
-		const aliases = await listUrlsWithTag(tag_id);
+		const aliases = await listUrlsWithTag(req.user.id, tag_id, order_by);
 		return res.json(aliases);
 	} catch (err) {
 		res.status(500).json(err);
@@ -178,7 +180,7 @@ export async function redirectUrlService(req, res) {
 
 		res.redirect(redirect_to);
 
-		await incrementUrlClicks(redirect_to);
+		await incrementUrlClicks(req.params.alias);
 	} catch (err) {
 		res.status(500).json(err);
 	}

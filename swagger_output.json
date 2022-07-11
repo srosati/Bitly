@@ -311,7 +311,12 @@
         "description": "",
         "parameters": [
           {
-            "name": "tag",
+            "name": "tag_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
             "in": "query",
             "type": "string"
           }
@@ -480,7 +485,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "tag": {
+                "tag_id": {
                   "example": "any"
                 }
               }
@@ -517,7 +522,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "tag": {
+                "tag_id": {
                   "example": "any"
                 }
               }
