@@ -8,7 +8,7 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 		}),
 
 		listUrls: build.query({
-			query: (params) => `urls?${new URLSearchParams(Object.entries(params)).toString()}`,
+			query: () => `urls`,
 			providesTags: (result) =>
 				result && result.data
 					? [

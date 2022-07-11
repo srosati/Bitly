@@ -23,7 +23,6 @@ export async function listUrlsService(req, res) {
 	try {
 		let tag_id = req.query.tag_id;
 		let order_by = req.query.order_by;
-		console.log(tag_id, order_by);
 		if (!tag_id) {
 			const aliases = await listUrls(req.user.id, order_by);
 			return res.json(aliases);

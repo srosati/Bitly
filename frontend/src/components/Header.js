@@ -1,7 +1,7 @@
-import { Badge, Container, Image, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Image, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { BsBoxArrowInLeft, BsFillInboxFill, BsPersonFill } from 'react-icons/bs';
+import { BsBoxArrowInLeft, BsFillInboxFill } from 'react-icons/bs';
 import { setCredentials } from '../api/auth/authSlice';
 
 import { useFindUser } from '../api/users/usersSlice';
@@ -14,19 +14,10 @@ const logo = 'https://sproutsocial.com/insights/social-media-image-sizes-guide/'
 function LoggedInNavBar(props) {
 	const { userId, dispatch } = props;
 	const [name, setName] = useState('');
-	const [requestAmount, setRequestAmount] = useState(0);
-	const { data: user } = useFindUser(`users/${userId}`);
+	const { data: user } = useFindUser(userId);
 	const navigate = useNavigate();
 
-	useEffect(() => setName(user ? user.firstName : ''), [user]);
-
-	useEffect(
-		() =>
-			setRequestAmount(
-				user ? user.acceptedRequestAmount + user.declinedRequestAmount + user.pendingRequestAmount : 0
-			),
-		[user]
-	);
+	useEffect(() => setName(user ? user.email : ''), [user]);
 
 	return (
 		<NavDropdown
@@ -35,41 +26,24 @@ function LoggedInNavBar(props) {
 				<div style={{ display: 'inline-block' }}>
 					<div className='d-flex justify-content-center align-items-center'>
 						<span className='color-grey fw-bold'>{name}</span>
-						{requestAmount > 0 && (
-							<span className='ms-1'>
-								<Badge className='bg-rentapp-red'>{requestAmount}</Badge>
-							</span>
-						)}
 					</div>
 				</div>
 			}
 			className='active color-grey'
 			id='collasible-nav-dropdown'
 		>
-			<NavDropdown.Item onClick={() => navigate('proposals')} style={{ display: 'inline-block' }}>
+			<NavDropdown.Item onClick={() => navigate('/')} style={{ display: 'inline-block' }}>
 				<div>
 					<BsFillInboxFill className='me-1' />
-					<span>requests</span>
-					{requestAmount > 0 && (
-						<span className=''>
-							<Badge className='bg-rentapp-red'>{requestAmount}</Badge>
-						</span>
-					)}
+					<span>Urls</span>
 				</div>
-			</NavDropdown.Item>
-
-			<NavDropdown.Item onClick={() => navigate('profile')}>
-				<span>
-					<BsPersonFill className='me-1' />
-				</span>
-				<span>profile</span>
 			</NavDropdown.Item>
 
 			<NavDropdown.Item onClick={() => dispatch(setCredentials({ token: null, rememberMe: false }))}>
 				<span>
 					<BsBoxArrowInLeft className='me-1' />
 				</span>
-				<span>logout</span>
+				<span>Logout</span>
 			</NavDropdown.Item>
 		</NavDropdown>
 	);
@@ -80,13 +54,13 @@ function LoggedOutNavBar() {
 		<React.Fragment>
 			<LinkContainer to='/login'>
 				<Nav.Link as='a' className='active fw-bold'>
-					login
+					Login
 				</Nav.Link>
 			</LinkContainer>
 
 			<LinkContainer to='/register'>
 				<Nav.Link as='a' className='active fw-bold'>
-					signup
+					Signup
 				</Nav.Link>
 			</LinkContainer>
 		</React.Fragment>
@@ -108,15 +82,15 @@ export default function Header() {
 				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
 				<Navbar.Collapse className='mt-2' id='responsive-nav-bar'>
 					<Nav className='ms-auto d-flex align-items-center'>
-						<LinkContainer to='/marketplace'>
+						<LinkContainer to='/'>
 							<Nav.Link as='a' className='active fw-bold nav-bar-link'>
-								marketplace
+								Home
 							</Nav.Link>
 						</LinkContainer>
 
-						<LinkContainer to='/createArticle'>
+						<LinkContainer to='/new-url'>
 							<Nav.Link as='a' className='active fw-bold nav-bar-link'>
-								publishArticle
+								Create Url
 							</Nav.Link>
 						</LinkContainer>
 
