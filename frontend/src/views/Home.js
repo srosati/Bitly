@@ -45,6 +45,7 @@ export default function Home() {
 							<UrlItem
 								title={currentUrl.title}
 								created_at={currentUrl.created_at}
+								redirect_to={currentUrl.redirect_to}
 								alias={alias}
 								clicks={currentUrl.clicks}
 								id={currentUrl.id}

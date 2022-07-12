@@ -17,8 +17,8 @@ export default function UrlItem({ title, redirect_to, created_at, alias, clicks,
 	}, [result]);
 
 	return (
-		<div>
-			<Row className='align-items-center justify-content-between'>
+		<div className='bg-white p-3 rounded'>
+			<Row className='align-items-center'>
 				<Col xs={10}>
 					<h1 className='m-0'>{title}</h1>
 				</Col>
@@ -39,8 +39,7 @@ export default function UrlItem({ title, redirect_to, created_at, alias, clicks,
 			</p>
 			<p>Created at: {new Date(created_at).toLocaleDateString()}</p>
 			<p>
-				Alias:{' '}
-				<a href={`${process.env.REACT_APP_API_URL}/${alias}`}>{`${process.env.REACT_APP_API_URL}/${alias}`}</a>
+				Alias: <a href={alias}>{alias}</a>
 			</p>
 			<p>Clicks: {clicks}</p>
 		</div>
