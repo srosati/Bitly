@@ -7,6 +7,7 @@ import CreateNewUrl from './CreateNewUrl';
 import useUserId from '../hooks/useUserId.js';
 import { useLocation, Navigate } from 'react-router-dom';
 import Register from './Register';
+import EditUrl from './EditUrl';
 function RequireAuth(props) {
 	const id = useUserId();
 	const location = useLocation();
@@ -26,6 +27,14 @@ export default function RouteMapper() {
 					element={
 						<RequireAuth>
 							<CreateNewUrl />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path={`/editUrl/:id`}
+					element={
+						<RequireAuth>
+							<EditUrl />
 						</RequireAuth>
 					}
 				/>

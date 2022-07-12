@@ -1,7 +1,9 @@
 import { ListGroup, Row, Col, Container, Button } from 'react-bootstrap';
+import { BsPencilFill } from 'react-icons/bs';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
 import { useListUrls } from '../api/urls/urlsSlice.js';
+import useUserId from '../hooks/useUserId.js';
 import { useNavigate } from 'react-router';
 
 export default function Home() {
@@ -9,14 +11,20 @@ export default function Home() {
 	const [currentUrl, setCurrentUrl] = useState({});
 	const [alias, setAlias] = useState('');
 
+	const loggedId = useUserId();
 
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (!isSuccess || !data || data.length === 0) return;
 
-		setCurrentUrl(data[0])
-		setAlias(`${process.env.REACT_APP_API_URL}/${data[0].url}`);
+		setCurrentUrl(data[0]);
+		setAlias(`${process.env.REACT_APP_API_URL}/${data[0].alias}`);
 	}, [isSuccess, data]);
+
+	const goToEditUrl = () => {
+		let path = new URL(`/editUrl/${currentUrl.id}`, process.env.REACT_APP_API_URL);
+		navigate(path);
+	};
 
 	return (
 		<>
@@ -43,7 +51,17 @@ export default function Home() {
 					<Col md={7}>
 						{isSuccess && currentUrl.id ? (
 							<div>
-								<h1>{currentUrl.title}</h1>
+								<Row>
+									<h1>{currentUrl.title}</h1>
+									<p>
+										{loggedId && (
+											<BsPencilFill
+												className='col-1 fa-lg color-action'
+												onClick={() => goToEditUrl()}
+											/>
+										)}
+									</p>
+								</Row>
 								<hr></hr>
 								<p>
 									<a href={currentUrl.redirect_to}>{currentUrl.redirect_to}</a>
@@ -52,8 +70,8 @@ export default function Home() {
 								<p>
 									Alias:{' '}
 									<a
-										href={alias}
-									>{alias}</a>
+										href={`${process.env.REACT_APP_API_URL}/${currentUrl.alias}`}
+									>{`${process.env.REACT_APP_API_URL}/${currentUrl.alias}`}</a>
 								</p>
 								<p>Clicks: {currentUrl.clicks}</p>
 							</div>

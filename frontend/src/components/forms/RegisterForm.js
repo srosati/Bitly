@@ -39,7 +39,7 @@ export function RegisterForm() {
 		<Card className='card-style create-card'>
 			<Card.Body className='form-container'>
 				<Card.Title>
-					<h3 className='fw-bold'>Create User</h3>
+					<h3 className='fw-bold'>Register</h3>
 					<hr />
 				</Card.Title>
 				<Form onSubmit={handleSubmit(onSubmit)}>
@@ -72,7 +72,7 @@ export function RegisterForm() {
 					</div>
 					<div className='d-grid gap-2'>
 						<Button className='bg-color-action btn-dark mt-3 mb-2' type='submit'>
-							Create
+							Register
 						</Button>
 					</div>
 				</Form>

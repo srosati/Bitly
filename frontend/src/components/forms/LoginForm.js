@@ -54,7 +54,7 @@ export default function LogInComponent() {
 							type='email'
 							name='email'
 							label='Email'
-							placeholder='email'
+							placeholder='Email'
 							error={errors.email}
 							errorMessage='email Error'
 							validation={{ required: true, minLength: 3, maxLength: 320 }}
@@ -64,7 +64,7 @@ export default function LogInComponent() {
 							type='password'
 							name='password'
 							label='Password'
-							placeholder='password'
+							placeholder='Password'
 							error={errors.password}
 							errorMessage='Password error'
 							validation={{ required: true, minLength: 8, maxLength: 20 }}

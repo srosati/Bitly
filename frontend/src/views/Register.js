@@ -6,7 +6,7 @@ export default function Register() {
 	return (
 		<>
 			<Helmet>
-				<title>New Url</title>
+				<title>Register</title>
 			</Helmet>
 			<Container style={{ width: '50%' }} className='min-height'>
 				<RegisterForm></RegisterForm>

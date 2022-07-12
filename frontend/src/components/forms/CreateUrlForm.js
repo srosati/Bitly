@@ -54,6 +54,7 @@ function CreateUrlForm() {
 							register={register}
 							label='Alias'
 							name='alias'
+							prependIcon={`${process.env.REACT_APP_API_URL}/`}
 							type='text'
 							error={errors.alias}
 							errorMessage='Alias is required'
@@ -66,6 +67,7 @@ function CreateUrlForm() {
 							register={register}
 							label='Title'
 							name='name'
+							placeholder='Title'
 							error={errors.name}
 							errorMessage='Erront'
 							type='text'

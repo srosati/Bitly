@@ -3,7 +3,7 @@ import { BaseApiSlice } from '../baseApiSlice';
 const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 	endpoints: (build) => ({
 		findUrl: build.query({
-			query: (id) => `urls/${id}`,
+			query: (url) => url.toString(),
 			providesTags: (result) => (result ? [{ type: 'Url', id: result.id }] : ['Url'])
 		}),
 
@@ -11,10 +11,7 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 			query: () => `urls`,
 			providesTags: (result) =>
 				result && result.data
-					? [
-							...result.data.map(({ id }) => ({ type: 'Url', id: id })),
-							{ type: 'Url', id: 'PARTIAL-LIST' }
-					  ]
+					? [...result.data.map(({ id }) => ({ type: 'Url', id: id })), { type: 'Url', id: 'PARTIAL-LIST' }]
 					: [{ type: 'Url', id: 'PARTIAL-LIST' }]
 		}),
 
@@ -30,33 +27,31 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 		}),
 
 		updateUrl: build.mutation({
-			query: ({ id, ...args }) => ({
-				url: `urls/${id}`,
+			query: ({ url, ...args }) => ({
+				url: url.toString(),
 				method: 'PUT',
 				body: args
 			}),
 			invalidatesTags: (_, __, arg) => {
-                // TODO: ver que poronga era esto
+				// TODO: ver que poronga era esto
 				const parts = arg.url.split('/');
-				return [
-					{ type: 'Url', id: parts[parts.length - 1] },
-				];
+				return [{ type: 'Url', id: parts[parts.length - 1] }];
 			}
 		}),
 
-        deleteUrl: build.mutation({
-            query: (id) => ({
-                url: `urls/${id}`,
-                method: 'DELETE'
-            }),
-            invalidatesTags: (_, __, arg) => {
-                const parts = arg.url.split('/');
-                return [
-                    { type: 'Url', id: parts[parts.length - 1] },
-                    { type: 'Url', id: 'PARTIAL-LIST' }
-                ];
-            }
-        })
+		deleteUrl: build.mutation({
+			query: (id) => ({
+				url: `urls/${id}`,
+				method: 'DELETE'
+			}),
+			invalidatesTags: (_, __, arg) => {
+				const parts = arg.url.split('/');
+				return [
+					{ type: 'Url', id: parts[parts.length - 1] },
+					{ type: 'Url', id: 'PARTIAL-LIST' }
+				];
+			}
+		})
 	})
 });
 
