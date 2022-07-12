@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import './assets/css/index.css';
 import { Provider } from 'react-redux';
 import { persistor, store } from './store';
@@ -9,7 +10,10 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import Startup from './startup.js';
 import { HelmetProvider } from 'react-helmet-async';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
 	<div className='bg-color-grey min-height'>
 		<React.StrictMode>
 			<Provider store={store}>
@@ -20,6 +24,5 @@ ReactDOM.render(
 				</HelmetProvider>
 			</Provider>
 		</React.StrictMode>
-	</div>,
-	document.getElementById('root')
+	</div>
 );

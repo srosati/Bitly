@@ -1,8 +1,7 @@
 import { Card, Image, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-const logo = 'https://sproutsocial.com/insights/social-media-image-sizes-guide/';
+import logo from '../assets/img/logo.png';
 
-// function Footer(props: ReduxProps) {
 export default function Footer() {
 	return (
 		<footer className=' footer-style bg-color-primary'>
@@ -12,7 +11,7 @@ export default function Footer() {
 				</div>
 				<div className='col-4'>
 					<ListGroup as='ul' className='col-6 list-unstyled'>
-						<h3 className='h3 fw-bold color-grey'>team</h3>
+						<h3 className='h3 fw-bold color-grey'>Team</h3>
 						<ListGroupItem bsPrefix='color-grey fw-bold mt-2'>Santos Rosati</ListGroupItem>
 						<ListGroupItem bsPrefix='color-grey fw-bold mt-2'>Matias Lombardi</ListGroupItem>
 						<ListGroupItem bsPrefix='color-grey fw-bold mt-2'>Patrick Dey</ListGroupItem>
@@ -21,11 +20,20 @@ export default function Footer() {
 
 				<div className='col-4'>
 					<ListGroup className='list-unstyled' as='ul'>
-						<ListGroupItem bsPrefix='h3 fw-bold color-grey'>contact</ListGroupItem>
+						<ListGroupItem bsPrefix='h3 fw-bold color-grey'>Contact</ListGroupItem>
 						<ListGroupItem bsPrefix='lead color-grey'>
-							email:
-							<a href='mailto:paw2021b3@gmail.com' className='color-secondary ms-1 pb-1'>
-								paw2021b3@gmail.com
+							<a href='mailto:srosati@itba.edu.ar' className='color-secondary ms-1 pb-1'>
+								srosati@itba.edu.ar
+							</a>
+						</ListGroupItem>
+						<ListGroupItem bsPrefix='lead color-grey'>
+							<a href='mlombardi@itba.edu.ar' className='color-secondary ms-1 pb-1'>
+								mlombardi@itba.edu.ar
+							</a>
+						</ListGroupItem>
+						<ListGroupItem bsPrefix='lead color-grey'>
+							<a href='mailto:pdey@itba.edu.ar' className='color-secondary ms-1 pb-1'>
+								pdey@itba.edu.ar
 							</a>
 						</ListGroupItem>
 					</ListGroup>
@@ -35,7 +43,7 @@ export default function Footer() {
 				className='bg-color-secondary d-flex justify-content-center align-content-center'
 				style={{ height: '40px' }}
 			>
-				<p className='fw-light'>PAW 2021b - Grupo 3</p>
+				<p className='fw-light'>Bases de Datos 2 - Grupo PMS</p>
 			</Card.Footer>
 		</footer>
 	);

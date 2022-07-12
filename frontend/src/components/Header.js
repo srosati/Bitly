@@ -9,7 +9,7 @@ import useUserId from '../hooks/useUserId';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 
-const logo = 'https://sproutsocial.com/insights/social-media-image-sizes-guide/';
+import logo from '../assets/img/logo.png';
 
 function LoggedInNavBar(props) {
 	const { userId, dispatch } = props;
@@ -20,32 +20,46 @@ function LoggedInNavBar(props) {
 	useEffect(() => setName(user ? user.email : ''), [user]);
 
 	return (
-		<NavDropdown
-			as='span'
-			title={
-				<div style={{ display: 'inline-block' }}>
-					<div className='d-flex justify-content-center align-items-center'>
-						<span className='color-grey fw-bold'>{name}</span>
-					</div>
-				</div>
-			}
-			className='active color-grey'
-			id='collasible-nav-dropdown'
-		>
-			<NavDropdown.Item onClick={() => navigate('/')} style={{ display: 'inline-block' }}>
-				<div>
-					<BsFillInboxFill className='me-1' />
-					<span>Urls</span>
-				</div>
-			</NavDropdown.Item>
+		<>
+			<LinkContainer to='/'>
+				<Nav.Link as='a' className='active fw-bold nav-bar-link'>
+					Home
+				</Nav.Link>
+			</LinkContainer>
 
-			<NavDropdown.Item onClick={() => dispatch(setCredentials({ token: null, rememberMe: false }))}>
-				<span>
-					<BsBoxArrowInLeft className='me-1' />
-				</span>
-				<span>Logout</span>
-			</NavDropdown.Item>
-		</NavDropdown>
+			<LinkContainer to='/new-url'>
+				<Nav.Link as='a' className='active fw-bold nav-bar-link'>
+					Create Url
+				</Nav.Link>
+			</LinkContainer>
+
+			<NavDropdown
+				as='span'
+				title={
+					<div style={{ display: 'inline-block' }}>
+						<div className='d-flex justify-content-center align-items-center'>
+							<span className='color-grey fw-bold'>{name}</span>
+						</div>
+					</div>
+				}
+				className='active color-grey'
+				id='collasible-nav-dropdown'
+			>
+				<NavDropdown.Item onClick={() => navigate('/')} style={{ display: 'inline-block' }}>
+					<div>
+						<BsFillInboxFill className='me-1' />
+						<span>Urls</span>
+					</div>
+				</NavDropdown.Item>
+
+				<NavDropdown.Item onClick={() => dispatch(setCredentials({ token: null, rememberMe: false }))}>
+					<span>
+						<BsBoxArrowInLeft className='me-1' />
+					</span>
+					<span>Logout</span>
+				</NavDropdown.Item>
+			</NavDropdown>
+		</>
 	);
 }
 
@@ -82,18 +96,6 @@ export default function Header() {
 				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
 				<Navbar.Collapse className='mt-2' id='responsive-nav-bar'>
 					<Nav className='ms-auto d-flex align-items-center'>
-						<LinkContainer to='/'>
-							<Nav.Link as='a' className='active fw-bold nav-bar-link'>
-								Home
-							</Nav.Link>
-						</LinkContainer>
-
-						<LinkContainer to='/new-url'>
-							<Nav.Link as='a' className='active fw-bold nav-bar-link'>
-								Create Url
-							</Nav.Link>
-						</LinkContainer>
-
 						{userId != null ? <LoggedInNavBar dispatch={dispatch} userId={userId} /> : <LoggedOutNavBar />}
 					</Nav>
 				</Navbar.Collapse>
