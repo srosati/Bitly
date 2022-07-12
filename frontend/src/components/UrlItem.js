@@ -1,7 +1,7 @@
 import { BsPencilFill, BsTrash } from 'react-icons/bs';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Card, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
-import { useDeleteUrl } from '../api/urls/urlsSlice';
+import { useDeleteUrl, useListUrlTags } from '../api/urls/urlsSlice';
 import { useEffect } from 'react';
 
 export default function UrlItem({ title, redirect_to, created_at, alias, clicks, id, onDelete }) {
@@ -16,32 +16,52 @@ export default function UrlItem({ title, redirect_to, created_at, alias, clicks,
 		if (result.isSuccess) onDelete();
 	}, [result]);
 
+	const { data: tags, isSuccess } = useListUrlTags(id);
+
 	return (
-		<div className='bg-white p-3 rounded'>
-			<Row className='align-items-center'>
-				<Col xs={10}>
-					<h1 className='m-0'>{title}</h1>
-				</Col>
-				<Col>
-					<span>
-						<BsPencilFill className='fa-lg color-action' onClick={() => goToEditUrl()} />
-					</span>
-				</Col>
-				<Col>
-					<span>
-						<BsTrash className='fa-lg color-danger' onClick={() => deleteUrl(id)} />
-					</span>
-				</Col>
-			</Row>
-			<hr></hr>
-			<p>
-				<a href={redirect_to}>{redirect_to}</a>
-			</p>
-			<p>Created at: {new Date(created_at).toLocaleDateString()}</p>
-			<p>
-				Alias: <a href={alias}>{alias}</a>
-			</p>
-			<p>Clicks: {clicks}</p>
-		</div>
+		<Card className='bg-white p-3 rounded'>
+			<Card.Body>
+				<Card.Title>
+					<Row className='align-items-center'>
+						<Col xs={10}>
+							<h2 className='m-0'>{title}</h2>
+						</Col>
+						<Col>
+							<span>
+								<BsPencilFill className='fa-lg color-action' onClick={() => goToEditUrl()} />
+							</span>
+						</Col>
+						<Col>
+							<span>
+								<BsTrash className='fa-lg color-danger' onClick={() => deleteUrl(id)} />
+							</span>
+						</Col>
+					</Row>
+				</Card.Title>
+				<hr></hr>
+
+				<p className='lead'>
+					<a href={redirect_to}>{redirect_to}</a>
+				</p>
+				<p className='lead'>
+					<b>Created at:</b> {new Date(created_at).toLocaleDateString()}
+				</p>
+				<p className='lead'>
+					<b>Alias:</b> <a href={alias}>{alias}</a>
+				</p>
+				<p className='lead'>
+					<b>Clicks:</b> {clicks}
+				</p>
+				<div>
+					{isSuccess &&
+						tags &&
+						tags.map((tag) => (
+							<p className='lead' key={tag.id}>
+								<b>Tag:</b> <Badge>{tag.name.toUpperCase()}</Badge>
+							</p>
+						))}
+				</div>
+			</Card.Body>
+		</Card>
 	);
 }

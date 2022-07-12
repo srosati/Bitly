@@ -3,9 +3,9 @@ import { getUser } from '../users/model.js';
 import { validationResult } from 'express-validator';
 
 //TODO: add user id to list
-export async function listTagsService(_, res) {
+export async function listTagsService(req, res) {
 	try {
-		const tags = await listTags({});
+		const tags = await listTags(req.user.id);
 		return res.json(tags);
 	} catch (err) {
 		return res.status(500).json({ error: err.message });

@@ -8,7 +8,8 @@ import {
 	listUrlsService,
 	updateUrlService,
 	appendTagService,
-	removeTagService
+	removeTagService,
+	listUrlTagsService
 } from './service.js';
 
 import { createUrlValidator, updateUrlValidator, urlIdValidator, tagValidator, queryValidator } from './validation.js';
@@ -21,12 +22,14 @@ urlRouter.get('/:id', isLoggedIn, urlIdValidator, getUrlService);
 
 urlRouter.post('/', isLoggedIn, createUrlValidator, createUrlService);
 
-urlRouter.post('/:id/tag', isUrlOwner, tagValidator, appendTagService);
+urlRouter.get('/:id/tags', isUrlOwner, urlIdValidator, listUrlTagsService);
+
+urlRouter.post('/:id/tags', isUrlOwner, tagValidator, appendTagService);
 
 urlRouter.put('/:id', isUrlOwner, updateUrlValidator, updateUrlService);
 
 urlRouter.delete('/:id', isUrlOwner, urlIdValidator, deleteUrlService);
 
-urlRouter.delete('/:id/tag', isUrlOwner, tagValidator, removeTagService);
+urlRouter.delete('/:id/tags', isUrlOwner, tagValidator, removeTagService);
 
 export default urlRouter;

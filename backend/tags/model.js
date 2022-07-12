@@ -5,9 +5,9 @@ export async function createTag(name, user_id) {
 	return result.rows[0];
 }
 
-export async function listTags() {
-	const result = await db.query('SELECT * FROM tags');
-	return result.rows;
+export async function listTags(user_id) {
+	const result = await db.query('SELECT * FROM tags WHERE user_id = $1', [user_id]);
+		return result.rows;
 }
 
 export async function getTagById(id) {

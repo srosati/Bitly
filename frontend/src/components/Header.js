@@ -29,7 +29,7 @@ function LoggedInNavBar(props) {
 
 			<LinkContainer to='/new-url'>
 				<Nav.Link as='a' className='active fw-bold nav-bar-link'>
-					Create Url
+					Create Alias
 				</Nav.Link>
 			</LinkContainer>
 

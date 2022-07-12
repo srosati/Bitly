@@ -6,6 +6,7 @@ import {
 	updateUrl,
 	deleteUrl,
 	getUrlByAlias,
+	getUrlTags,
 	incrementUrlClicks,
 	getRedisAlias,
 	setRedisAlias,
@@ -97,6 +98,22 @@ export async function removeTagService(req, res) {
 	try {
 		await removeTag(url.id, tag.id);
 		res.json(url);
+	} catch (err) {
+		res.status(500).json({ error: err });
+	}
+}
+
+export async function listUrlTagsService(req, res) {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+	let url = await getUrl(req.params.id);
+	if (url == null) {
+		return res.status(404).json({ error: 'Url not found' });
+	}
+	try {
+		const tags = await getUrlTags(url.id);
+		res.json(tags);
 	} catch (err) {
 		res.status(500).json({ error: err });
 	}

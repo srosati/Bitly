@@ -18,6 +18,11 @@ export async function listUrlsWithTag(user_id, tag_id, order = 'created_at') {
 	return result.rows;
 }
 
+export async function getUrlTags(url_id) {
+	const result = await db.query(`SELECT * FROM url_tags LEFT JOIN tags on tags.id = url_tags.tag_id WHERE url_tags.url_id = $1`, [url_id]);
+	return result.rows;
+}
+
 export async function createUrl(user_id, redirect_to, alias, title = alias) {
 	const result = await db.query(
 		`INSERT INTO urls (user_id, redirect_to, alias, title) VALUES ($1, $2, $3, $4) RETURNING *`,
