@@ -23,19 +23,23 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 					body: args
 				};
 			},
-			invalidatesTags: [{ type: 'Article', id: 'PARTIAL-LIST' }]
+			invalidatesTags: [{ type: 'Url', id: 'PARTIAL-LIST' }]
 		}),
 
 		updateUrl: build.mutation({
-			query: ({ url, ...args }) => ({
-				url: url.toString(),
+			query: ({ id, ...args }) => ({
+				url: `urls/${id}`,
 				method: 'PUT',
 				body: args
 			}),
-			invalidatesTags: (_, __, arg) => {
-				// TODO: ver que poronga era esto
-				const parts = arg.url.split('/');
-				return [{ type: 'Url', id: parts[parts.length - 1] }];
+			invalidatesTags: ({ id }) => {
+				return [
+					{ type: 'Url', id: id },
+					{
+						type: 'Url',
+						id: 'PARTIAL-LIST'
+					}
+				];
 			}
 		}),
 

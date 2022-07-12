@@ -20,8 +20,15 @@ export default function RouteMapper() {
 			<Routes>
 				<Route path='*' element={<Error error={404} message='Not found' />} />
 				<Route path='/login' element={<Login />} />
-				<Route path='/' element={<Home />} />
 				<Route path='/register' element={<Register />} />
+				<Route
+					path='/'
+					element={
+						<RequireAuth>
+							<Home />
+						</RequireAuth>
+					}
+				/>
 				<Route
 					path='/new-url'
 					element={

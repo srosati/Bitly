@@ -14,13 +14,17 @@ const AuthApiSlice = BaseApiSlice.injectEndpoints({
 				};
 			},
 			transformResponse: (response, meta, { callback }) => {
-				// const auth = meta?.response?.headers.get('Authorization');
-				// if (auth == null) return callback(null);
 				const token = response.token;
 				if (token == null) return callback(null);
 
 				return callback(token);
-			}
+			},
+			invalidatesTags: () => [
+				{
+					type: 'Url',
+					id: 'PARTIAL-LIST'
+				}
+			]
 		})
 	})
 });

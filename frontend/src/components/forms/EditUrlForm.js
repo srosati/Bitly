@@ -23,8 +23,8 @@ export function EditUrlForm() {
 
 	function onSubmit(data) {
 		console.log('NEW DATA', id);
-		console.log(data);
-		updateUrl({ url: `urls/${id}`, ...data });
+		console.log({ id: id, ...data });
+		updateUrl({ id: id, ...data });
 	}
 
 	return (
