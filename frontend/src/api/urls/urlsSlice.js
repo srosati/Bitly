@@ -48,10 +48,9 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 				url: `urls/${id}`,
 				method: 'DELETE'
 			}),
-			invalidatesTags: (_, __, arg) => {
-				const parts = arg.url.split('/');
+			invalidatesTags: (id) => {
 				return [
-					{ type: 'Url', id: parts[parts.length - 1] },
+					{ type: 'Url', id: id },
 					{ type: 'Url', id: 'PARTIAL-LIST' }
 				];
 			}
@@ -63,5 +62,6 @@ export const {
 	useListUrlsQuery: useListUrls,
 	useFindUrlQuery: useFindUrl,
 	useCreateUrlMutation: useCreateUrl,
-	useUpdateUrlMutation: useUpdateUrl
+	useUpdateUrlMutation: useUpdateUrl,
+	useDeleteUrlMutation: useDeleteUrl
 } = UrlsApiSlice;

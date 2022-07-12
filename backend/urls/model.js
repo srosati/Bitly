@@ -5,12 +5,12 @@ const order_by = {
 	created_at: 'created_at'
 };
 
-export async function listUrls(user_id, order = "created_at") {
+export async function listUrls(user_id, order = 'created_at') {
 	const result = await db.query(`SELECT * FROM urls WHERE user_id = $1 ORDER BY ${order_by[order]}`, [user_id]);
 	return result.rows;
 }
 
-export async function listUrlsWithTag(user_id, tag_id, order = "created_at") {
+export async function listUrlsWithTag(user_id, tag_id, order = 'created_at') {
 	const result = await db.query(
 		`SELECT * FROM urls JOIN url_tags ut ON urls.id = ut.url_id WHERE user_id = $1 AND tag_id = $2 ORDER BY ${order_by[order]}`,
 		[user_id, tag_id]
@@ -65,7 +65,7 @@ export async function incrementUrlClicks(alias) {
 
 export async function deleteUrl(id) {
 	const result = await db.query(`DELETE FROM urls WHERE id = $1 RETURNING *`, [id]);
-	await removeRedisAlias(alias, redirect_to);
+	await removeRedisAlias(result.rows[0].alias);
 
 	return result.rows[0];
 }

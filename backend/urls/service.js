@@ -144,7 +144,7 @@ export async function deleteUrlService(req, res) {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-	let url = await getUrlById(req.params.id);
+	let url = await getUrl(req.params.id);
 	if (url == null) {
 		return res.status(204).json({
 			error: 'Url not found'
