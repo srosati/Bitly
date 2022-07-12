@@ -1,18 +1,27 @@
-import { ListGroup, Row, Col, Container, Button, Dropdown, Badge } from 'react-bootstrap';
+import { ListGroup, Row, Col, Container, Button, Dropdown, Badge, Form, Card } from 'react-bootstrap';
+import { BsTrash } from 'react-icons/bs';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
 import { useListUrls } from '../api/urls/urlsSlice.js';
-import { useListTags } from '../api/tags/tagsSlice.js';
+import { useCreateTag, useListTags, useDeleteTag } from '../api/tags/tagsSlice.js';
 import { useNavigate } from 'react-router';
 import UrlItem from '../components/UrlItem.js';
 import { BsXCircle } from 'react-icons/bs';
+import { useForm } from 'react-hook-form';
+import FormInput from '../components/FormInputs/FormInput.js';
 
 export default function Home() {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm();
+
 	const [currentUrl, setCurrentUrl] = useState({});
 	const [currentOrder, setCurrentOrder] = useState(null);
 	const [currentTag, setCurrentTag] = useState(null);
 
-	const { data, isSuccess } = useListUrls({ tag: currentTag ? currentTag.id : null, orderBy: currentOrder });
+	const { data: urls, isSuccess } = useListUrls({ tag: currentTag ? currentTag.id : null, orderBy: currentOrder });
 
 	const orderBy = {
 		created_at: 'Created at',
@@ -25,17 +34,31 @@ export default function Home() {
 
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (!isSuccess || !data || data.length === 0) {
+		if (!isSuccess || !urls || urls.length === 0) {
 			setCurrentUrl({});
 			return;
 		}
 
-		setCurrentUrl(data[0]);
-	}, [isSuccess, data, currentTag, currentOrder]);
+		setCurrentUrl(urls[0]);
+	}, [isSuccess, urls, currentTag, currentOrder]);
 
 	useEffect(() => {
 		setAlias(`${process.env.REACT_APP_API_URL}/${currentUrl.alias}`);
 	}, [currentUrl]);
+
+	const [createTag, createTagResult] = useCreateTag();
+	useEffect(() => {
+		if (createTagResult.isSuccess) setCurrentTag(createTagResult.data.id);
+	}, [createTagResult]);
+
+	const [deleteTag, deleteTagResult] = useDeleteTag();
+	useEffect(() => {
+		if (deleteTagResult.isSuccess) setCurrentTag(null);
+	}, [deleteTagResult]);
+
+	function onSubmit(data) {
+		createTag(data);
+	}
 
 	return (
 		<>
@@ -74,14 +97,41 @@ export default function Home() {
 									Tags
 								</Dropdown.Toggle>
 
-								<Dropdown.Menu>
+								<Dropdown.Menu className='pa-3'>
 									{tagsIsSuccess &&
 										tags &&
 										tags.map((tag) => (
-											<Dropdown.Item key={tag.id} onClick={() => setCurrentTag(tag)}>
+											<Dropdown.Item
+												className='d-flex align-content-center justify-around'
+												key={tag.id}
+												onClick={() => setCurrentTag(tag)}
+											>
 												{tag.name}
+												<BsTrash
+													className='fa-lg color-danger justify-end'
+													onClick={() => deleteTag(tag.id)}
+												/>
 											</Dropdown.Item>
 										))}
+									<Dropdown.Divider />
+									<Dropdown.ItemText className='d-flex align-text-center justify-center px-7 '>
+										<Form onSubmit={handleSubmit(onSubmit)}>
+											<div className='d-flex align-items-center justify-content-center'>
+												<FormInput
+													register={register}
+													name='name'
+													type='text'
+													error={errors.name}
+													errorMessage='Name is required'
+													placeholder='New Tag'
+													validation={{ required: true, maxLength: 50, minLength: 3 }} //TODO ver que sea un url
+												/>
+												<Button className='ms-2' color='success' type='submit'>
+													+
+												</Button>
+											</div>
+										</Form>
+									</Dropdown.ItemText>
 								</Dropdown.Menu>
 							</Dropdown>
 							<Badge className='lead ml-10'>
@@ -95,8 +145,8 @@ export default function Home() {
 						</div>
 						<ListGroup defaultActiveKey='#link1'>
 							{isSuccess &&
-								data &&
-								data.map((url) => (
+								urls &&
+								urls.map((url) => (
 									<ListGroup.Item
 										key={url.id}
 										onClick={() => setCurrentUrl(url)}
@@ -119,7 +169,18 @@ export default function Home() {
 								onDelete={() => setCurrentUrl({})}
 							/>
 						) : (
-							<Button onClick={() => navigate('/new-url')}>Create new url</Button>
+							<Card className='p-3'>
+								<Card.Body className='d-flex flex-column align-items-center'>
+									<Card.Title>
+										<h3>There are no alias urls that match your search</h3>
+									</Card.Title>
+									<Card.Text>
+										<p className='Lead'>Have you tried creating a new one?</p>
+									</Card.Text>
+
+									<Button onClick={() => navigate('/new-url')}>Create new url</Button>
+								</Card.Body>
+							</Card>
 						)}
 					</Col>
 				</Row>
