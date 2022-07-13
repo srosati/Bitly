@@ -22,5 +22,6 @@ CREATE TABLE urls (
 
 CREATE TABLE url_tags (
     url_id   INTEGER NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
-    tag_id   INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE
+    tag_id   INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+    PRIMARY KEY(url_id, tag_id)
 );

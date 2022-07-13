@@ -35,8 +35,8 @@ const idValidator = {
 const tagIdValidator = {
 	in: 'body',
 	isInt: true,
-	errorMessage: 'Tag ID must be an integer',
-	toInt: true
+	toInt: true,
+	errorMessage: 'Tag id must be an integer'
 };
 
 const orderByValidator = {

@@ -47,14 +47,20 @@ export default function Home() {
 	}, [currentUrl]);
 
 	const [createTag, createTagResult] = useCreateTag();
-	useEffect(() => {
-		if (createTagResult.isSuccess) setCurrentTag(createTagResult.data.id);
-	}, [createTagResult]);
+	// useEffect(() => {
+	// 	if (createTagResult.isSuccess) setCurrentTag(createTagResult.data);
+	// }, [createTagResult]);
 
 	const [deleteTag, deleteTagResult] = useDeleteTag();
-	useEffect(() => {
-		if (deleteTagResult.isSuccess) setCurrentTag(null);
-	}, [deleteTagResult]);
+	// useEffect(() => {
+	// 	if (deleteTagResult.isSuccess) setCurrentTag(null);
+	// }, [deleteTagResult]);
+
+	function handleDeleteTag(e, id) {
+		e.preventDefault();
+		e.stopPropagation();
+		deleteTag(id);
+	}
 
 	function onSubmit(data) {
 		createTag(data);
@@ -68,21 +74,21 @@ export default function Home() {
 			<Container>
 				<Row>
 					<Col md={4}>
-						<div className='d-flex align-items-center'>
+						<div className='d-flex align-items-center lead mb-2'>
 							<Dropdown>
-								<Dropdown.Toggle variant='success' id='dropdown-basic'>
+								<Dropdown.Toggle className='lead' variant='success' id='dropdown-basic'>
 									Order By
 								</Dropdown.Toggle>
 
 								<Dropdown.Menu>
 									{Object.entries(orderBy).map(([key, value]) => (
-										<Dropdown.Item key={key} onClick={() => setCurrentOrder(key)}>
+										<Dropdown.Item className='lead' key={key} onClick={() => setCurrentOrder(key)}>
 											{value}
 										</Dropdown.Item>
 									))}
 								</Dropdown.Menu>
 							</Dropdown>
-							<Badge className='lead ms-7'>
+							<Badge className='lead ms-4 mt-3'>
 								{currentOrder && (
 									<>
 										{currentOrder.toUpperCase()}
@@ -93,30 +99,30 @@ export default function Home() {
 						</div>
 						<div className='d-flex align-items-center'>
 							<Dropdown>
-								<Dropdown.Toggle variant='success' id='dropdown-basic'>
+								<Dropdown.Toggle className='lead' variant='success' id='dropdown-basic'>
 									Tags
 								</Dropdown.Toggle>
 
-								<Dropdown.Menu className='pa-3'>
+								<Dropdown.Menu className='pa-4'>
 									{tagsIsSuccess &&
 										tags &&
 										tags.map((tag) => (
 											<Dropdown.Item
-												className='d-flex align-content-center justify-around'
+												className='lead'
 												key={tag.id}
 												onClick={() => setCurrentTag(tag)}
 											>
 												{tag.name}
 												<BsTrash
-													className='fa-lg color-danger justify-end'
-													onClick={() => deleteTag(tag.id)}
+													className='fa-lg ms-3 align-self-end color-danger'
+													onClick={(e) => handleDeleteTag(e, tag.id)}
 												/>
 											</Dropdown.Item>
 										))}
 									<Dropdown.Divider />
 									<Dropdown.ItemText className='d-flex align-text-center justify-center px-7 '>
 										<Form onSubmit={handleSubmit(onSubmit)}>
-											<div className='d-flex align-items-center justify-content-center'>
+											<div className='d-flex justify-center align-center'>
 												<FormInput
 													register={register}
 													name='name'
@@ -134,7 +140,7 @@ export default function Home() {
 									</Dropdown.ItemText>
 								</Dropdown.Menu>
 							</Dropdown>
-							<Badge className='lead ml-10'>
+							<Badge className='lead ms-4'>
 								{currentTag && (
 									<>
 										{currentTag.name.toUpperCase()}
@@ -143,7 +149,7 @@ export default function Home() {
 								)}
 							</Badge>
 						</div>
-						<ListGroup defaultActiveKey='#link1'>
+						<ListGroup defaultActiveKey='#link1' className='mt-4'>
 							{isSuccess &&
 								urls &&
 								urls.map((url) => (
@@ -151,6 +157,7 @@ export default function Home() {
 										key={url.id}
 										onClick={() => setCurrentUrl(url)}
 										active={currentUrl.id === url.id}
+										className='lead'
 									>
 										{url.title}
 									</ListGroup.Item>
@@ -175,7 +182,7 @@ export default function Home() {
 										<h3>There are no alias urls that match your search</h3>
 									</Card.Title>
 									<Card.Text>
-										<p className='Lead'>Have you tried creating a new one?</p>
+										<span className='Lead'>Have you tried creating a new one?</span>
 									</Card.Text>
 
 									<Button onClick={() => navigate('/new-url')}>Create new url</Button>

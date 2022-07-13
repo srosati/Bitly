@@ -68,13 +68,13 @@ export async function appendTagService(req, res) {
 	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
 	let url = await getUrl(req.params.id);
-	if (url == null) {
+	if (url == null) 
 		return res.status(404).json({ error: 'url not found' });
-	}
+	
 	let tag = await getTagById(req.body.tag_id);
-	if (tag == null) {
+	if (tag == null)
 		return res.status(404).json({ error: 'Tag not found' });
-	}
+
 	try {
 		await appendTag(url.id, tag.id);
 		res.json(url);

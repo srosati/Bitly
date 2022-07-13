@@ -1,7 +1,5 @@
 import { FormGroup, FormLabel, InputGroup, FormControl, Form } from 'react-bootstrap';
 import { UseFormRegister, Path, FieldError } from 'react-hook-form';
-import { ErrorMessageInterface } from '../../i18n/types';
-import ValidationInterface from './ValidationInterface';
 
 export default function FormSelect(props) {
 	const {
@@ -19,7 +17,7 @@ export default function FormSelect(props) {
 	} = props;
 	return (
 		<FormGroup>
-			<FormLabel>{label}</FormLabel>
+			{label && <FormLabel>{label}</FormLabel>}
 			<InputGroup>
 				{prependIcon != null && <InputGroup.Text>{prependIcon}</InputGroup.Text>}
 				<Form.Select

@@ -1,8 +1,9 @@
 import { BsPencilFill, BsTrash } from 'react-icons/bs';
-import { Col, Row, Card, Badge } from 'react-bootstrap';
+import { Col, Row, Card, Badge, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
-import { useDeleteUrl, useListUrlTags } from '../api/urls/urlsSlice';
+import { useDeleteUrl, useListUrlTags, useDeleteUrlTag } from '../api/urls/urlsSlice';
 import { useEffect } from 'react';
+import AddTagForm from './forms/AddTagForm';
 
 export default function UrlItem({ title, redirect_to, created_at, alias, clicks, id, onDelete }) {
 	const navigate = useNavigate();
@@ -17,6 +18,8 @@ export default function UrlItem({ title, redirect_to, created_at, alias, clicks,
 	}, [result]);
 
 	const { data: tags, isSuccess } = useListUrlTags(id);
+
+	const [deleteTag, deleteTagResult] = useDeleteUrlTag();
 
 	return (
 		<Card className='bg-white p-3 rounded'>
@@ -50,16 +53,25 @@ export default function UrlItem({ title, redirect_to, created_at, alias, clicks,
 					<b>Alias:</b> <a href={alias}>{alias}</a>
 				</p>
 				<p className='lead'>
-					<b>Clicks:</b> {clicks}
+					<b>Clicks:</b> <b className='h2 fw-bold color-rentapp-red'>{clicks}</b>
 				</p>
 				<div>
-					{isSuccess &&
-						tags &&
-						tags.map((tag) => (
-							<p className='lead' key={tag.id}>
-								<b>Tag:</b> <Badge>{tag.name.toUpperCase()}</Badge>
-							</p>
-						))}
+					<p className='lead mb-3'>
+						<b className='me-3'>Tags:</b>
+
+						{isSuccess &&
+							tags &&
+							tags.map((tag) => (
+								<Badge key={tag.id}>
+									{tag.name.toUpperCase()}
+									<BsTrash
+										className='fa-lg color-danger ms-1'
+										onClick={() => deleteTag({ url: id, tag: tag.id })}
+									/>
+								</Badge>
+							))}
+					</p>
+					<AddTagForm urlId={id} />
 				</div>
 			</Card.Body>
 		</Card>

@@ -7,7 +7,8 @@ const TagsApiSlice = BaseApiSlice.injectEndpoints({
 		}),
 
 		listTags: build.query({
-			query: () => 'tags'
+			query: () => 'tags',
+			providesTags: [{ type: 'Tag', id: 'PARTIAL_LIST' }]
 		}),
 
 		createTag: build.mutation({
@@ -17,7 +18,8 @@ const TagsApiSlice = BaseApiSlice.injectEndpoints({
 					method: 'POST',
 					body: args
 				};
-			}
+			},
+			invalidatesTags: [{ type: 'Tag', id: 'PARTIAL_LIST' }]
 		}),
 
 		updateTag: build.mutation({
@@ -27,7 +29,8 @@ const TagsApiSlice = BaseApiSlice.injectEndpoints({
 					method: 'PUT',
 					body: args
 				};
-			}
+			},
+			invalidatesTags: [{ type: 'Tag', id: 'PARTIAL_LIST' }]
 		}),
 
 		deleteTag: build.mutation({
@@ -36,7 +39,8 @@ const TagsApiSlice = BaseApiSlice.injectEndpoints({
 					url: `tags/${id}`,
 					method: 'DELETE'
 				};
-			}
+			},
+			invalidatesTags: [{ type: 'Tag', id: 'PARTIAL_LIST' }]
 		})
 	})
 });

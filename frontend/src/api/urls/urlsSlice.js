@@ -20,6 +20,32 @@ const UrlsApiSlice = BaseApiSlice.injectEndpoints({
 			providesTags: (result) => (result ? [{ type: 'UrlTags', id: result.id }] : ['UrlTags'])
 		}),
 
+		addUrlTag: build.mutation({
+			query: ({ url, tag }) => {
+				return {
+					url: `urls/${url}/tags`,
+					method: 'POST',
+					body: {
+						tag_id: tag
+					}
+				};
+			},
+			invalidatesTags: (result) => (result ? [{ type: 'UrlTags', id: result.url }] : ['UrlTags'])
+		}),
+
+		deleteUrlTag: build.mutation({
+			query: ({ url, tag }) => {
+				return {
+					url: `urls/${url}/tags`,
+					method: 'DELETE',
+					body: {
+						tag_id: tag
+					}
+				};
+			},
+			invalidatesTags: (result) => (result ? [{ type: 'UrlTags', id: result.url }] : ['UrlTags'])
+		}),
+
 		createUrl: build.mutation({
 			query: (args) => {
 				return {
@@ -67,6 +93,8 @@ export const {
 	useListUrlsQuery: useListUrls,
 	useFindUrlQuery: useFindUrl,
 	useListUrlTagsQuery: useListUrlTags,
+	useAddUrlTagMutation: useAddUrlTag,
+	useDeleteUrlTagMutation: useDeleteUrlTag,
 	useCreateUrlMutation: useCreateUrl,
 	useUpdateUrlMutation: useUpdateUrl,
 	useDeleteUrlMutation: useDeleteUrl
