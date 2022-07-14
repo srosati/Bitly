@@ -4,9 +4,9 @@ Trabajo Práctico Especial para la materia Base de Datos II
 
 ## Integrantes
 
-* [Dey, Patrick]
-* [Lombardi, Matías]
-* [Rosati, Santos]
+* Dey, Patrick
+* Lombardi, Matías
+* Rosati, Santos
 
 ## Redireccionamiento de URLs
 
