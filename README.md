@@ -16,3 +16,10 @@ El proyecto consiste en una API REST que guarda URLs y un alias relacionado, par
 - Node
 - Una base de datos PostgreSQL
 - Una base de datos Redis
+
+## Documentación
+
+Para documentar la API REST se utilizo la librería swagger-autogen de Swagger.
+La documentación obtenida puede ser accedida desde el siguiente link:
+
+https://app.swaggerhub.com/apis-docs/patrickmdey/PMS-Bitly/1.0.0
