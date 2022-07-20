@@ -1,5 +1,5 @@
 {
-	"name": "bitly",
+	"name": "urlshortener",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
@@ -12,14 +12,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/srosati/Bitly.git"
+		"url": "git+https://github.com/srosati/UrlShortener.git"
 	},
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/srosati/Bitly/issues"
+		"url": "https://github.com/srosati/UrlShortener/issues"
 	},
-	"homepage": "https://github.com/srosati/Bitly#readme",
+	"homepage": "https://github.com/srosati/UrlShortener#readme",
 	"dependencies": {
 		"bcrypt": "^5.0.1",
 		"cors": "^2.8.5",

@@ -69,7 +69,7 @@ export default function Home() {
 	return (
 		<>
 			<Helmet>
-				<title>Bitly</title>
+				<title>UrlShortner</title>
 			</Helmet>
 			<Container>
 				<Row>
