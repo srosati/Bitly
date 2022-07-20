@@ -63,4 +63,4 @@ Dentro de la carpeta frontend encontrara todos los archivos relacionados con la 
 Para documentar la API REST se utilizo la librería swagger-autogen de Swagger.
 La documentación obtenida puede ser accedida desde el siguiente link:
 
-https://bit.ly/bd2-pms
+https://bit.ly/PMS-UrlShortner
